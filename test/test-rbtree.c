@@ -319,6 +319,8 @@ void test_find_erase(rbtree *t, const key_t *arr, const size_t n) {
   for (int i = 0; i < n; i++) {
     node_t *p = rbtree_find(t, arr[i]);
     // printf("arr[%d] = %d\n", i, arr[i]);
+    printf("[DBG] before erase: i=%2d, key=%4d, find() → %p\n",
+      i, arr[i], (void*)p);
     assert(p != NULL);
     assert(p->key == arr[i]);
     rbtree_erase(t, p);
@@ -326,6 +328,8 @@ void test_find_erase(rbtree *t, const key_t *arr, const size_t n) {
 
   for (int i = 0; i < n; i++) {
     node_t *p = rbtree_find(t, arr[i]);
+    printf("[DBG] after erase:  i=%2d, key=%4d, find() → %p\n",
+           i, arr[i], (void*)p);
     assert(p == NULL);
   }
 
@@ -335,6 +339,8 @@ void test_find_erase(rbtree *t, const key_t *arr, const size_t n) {
     node_t *q = rbtree_find(t, arr[i]);
     assert(q != NULL);
     assert(q->key == arr[i]);
+    printf("[DBG] re-insert:     i=%2d, key=%4d, p=%p, q=%p\n",
+      i, arr[i], (void*)p, (void*)q);
     assert(p == q);
     rbtree_erase(t, p);
     q = rbtree_find(t, arr[i]);
