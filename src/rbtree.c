@@ -247,29 +247,26 @@ void delete_bottom_up(rbtree* t, node_t* db){     // doubly black bottom up
         sibling->color = RBTREE_RED;
         if(sibling->parent->color == RBTREE_RED){
           sibling->parent->color = RBTREE_BLACK;
+          return;
         }
         else{
           delete_bottom_up(t, sibling->parent);
+          return;
         }
       }
-      else if(sibling->right->color == RBTREE_RED){
-        // right child red
+      else if(sibling->left->color == RBTREE_RED){
+        sibling->left->color = RBTREE_BLACK;
+        sibling->color = RBTREE_RED;
+        right_rotate(t, sibling);
+        delete_bottom_up(t, db);
+        return;
+      }
+      else{
         sibling->right->color = RBTREE_BLACK;
         sibling->color = sibling->parent->color;
         sibling->parent->color = RBTREE_BLACK;
         left_rotate(t, sibling->parent);
-        return;
-      }
-      else{
-        // left child red
-        sibling->left->color = RBTREE_BLACK;
-        sibling->color = sibling->parent->color;
-        sibling->parent->color = RBTREE_BLACK;
-        right_rotate(t, sibling);
-        sibling = sibling->parent;
-        sibling->right->color = RBTREE_RED;
-        sibling->color = RBTREE_BLACK;
-        left_rotate(t, sibling->parent);
+        return;        
       }
     }
 
@@ -294,24 +291,19 @@ void delete_bottom_up(rbtree* t, node_t* db){     // doubly black bottom up
           delete_bottom_up(t, sibling->parent);
         }
       }
-      else if(sibling->left->color == RBTREE_RED){
-        // left child red
+      else if(sibling->right->color == RBTREE_RED){
+        sibling->right->color = RBTREE_BLACK;
+        sibling->color = RBTREE_RED;
+        left_rotate(t, sibling);
+        delete_bottom_up(t, db);
+        return;
+      }
+      else{
         sibling->left->color = RBTREE_BLACK;
         sibling->color = sibling->parent->color;
         sibling->parent->color = RBTREE_BLACK;
         right_rotate(t, sibling->parent);
         return;
-      }
-      else{
-        // right child red
-        sibling->right->color = RBTREE_BLACK;
-        sibling->color = sibling->parent->color;
-        sibling->parent->color = RBTREE_BLACK;
-        left_rotate(t, sibling);
-        sibling = sibling->parent;
-        sibling->left->color = RBTREE_RED;
-        sibling->color = RBTREE_BLACK;
-        right_rotate(t, sibling->parent);
       }
     }
   }
